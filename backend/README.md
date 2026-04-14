@@ -88,15 +88,55 @@ Documentação: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ---
 
+## Testes
+
+Os testes são executados com **pytest** e utilizam um banco de dados SQLite em memória para isolamento.
+
+### Executar todos os testes
+
+```bash
+pytest tests/
+```
+
+### Executar um teste específico
+
+```bash
+pytest tests/test_produtos.py::test_criar_produto
+```
+
+### Executar com cobertura de código
+
+```bash
+pytest tests/ --cov=app
+```
+
+### Testes disponíveis
+
+- **test_produtos.py** - Testes da API de produtos
+  - `test_criar_produto` - Criar um novo produto
+  - `test_nao_deve_criar_produto_duplicado` - Validar duplicação
+  - `test_listar_produtos` - Listar todos os produtos
+  - `test_obter_produto_por_id` - Obter produto por ID
+  - `test_retornar_404_ao_obter_produto_inexistente` - Tratamento de não encontrado
+  - `test_buscar_produtos` - Buscar produtos por query
+  - `test_atualizar_produto` - Atualizar dados do produto
+  - `test_deletar_produto` - Deletar um produto
+  - `test_detalhar_produto_com_metricas_e_avaliacoes` - Detalhes com métricas e avaliações
+  - `test_retornar_404_ao_detalhar_produto_inexistente` - Detalhes de produto inexistente
+
+---
+
 ## Estrutura do projeto
 
 ```
 backend/
 ├── app/
+│   ├── __init__.py
 │   ├── main.py              # Ponto de entrada da aplicação
 │   ├── database.py          # Configuração do banco de dados
 │   ├── config.py            # Variáveis de ambiente
 │   ├── models/              # Models do SQLAlchemy 
+│   │   ├── __init__.py
 │   │   ├── consumidor.py
 │   │   ├── produto.py
 │   │   ├── vendedor.py
@@ -104,23 +144,32 @@ backend/
 │   │   ├── item_pedido.py
 │   │   └── avaliacao_pedido.py
 │   ├── schemas/             # Schemas do Pydantic
-│   │   ├── consumidor.py
+│   │   ├── __init__.py
 │   │   ├── produto.py
-│   │   ├── vendedor.py
-│   │   ├── pedido.py
-│   │   ├── item_pedido.py
-│   │   └── avaliacao_pedido.py
+│   │   └── avaliacoes_pedidos.py
 │   └── routers/             # Rotas da API
-│       ├── consumidores.py
-│       ├── produtos.py
-│       ├── vendedores.py
-│       ├── pedidos.py
-│       ├── itens_pedidos.py
-│       └── avaliacoes_pedidos.py
+│       ├── __init__.py
+│       └── produtos.py
 ├── alembic/
 │   ├── env.py               # Configuração do Alembic
+│   ├── script.py.mako
 │   └── versions/            # Arquivos de migration
+│       └── 001_initial_schema.py
+├── tests/
+│   ├── __init__.py
+│   ├── conftest.py          # Configuração dos testes
+│   └── test_produtos.py     # Testes da API de produtos
+├── scripts/
+│   └── seed.py              # Script para popular o banco
+├── data/
+│   ├── dim_consumidores.csv
+│   ├── dim_produtos.csv
+│   ├── dim_vendedores.csv
+│   ├── fat_avaliacoes_pedidos.csv
+│   ├── fat_itens_pedidos.csv
+│   └── fat_pedidos.csv
 ├── alembic.ini              # Configuração principal do Alembic
 ├── requirements.txt
+├── README.md
 └── .env.example
 ```
